@@ -1,0 +1,5 @@
+ALTER TABLE locations
+ALTER COLUMN latitude DECIMAL(9,4);
+
+ALTER TABLE locations
+ALTER COLUMN longitude DECIMAL(9,4);

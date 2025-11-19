@@ -1,0 +1,25 @@
+# Maven target
+/target/
+
+# IntelliJ IDEA
+/.idea/
+/*.iml
+/out/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local properties / secrets
+*.env
+
+# H2 database files
+*.h2.db
+*.mv.db
+*.trace.db
+
+# Flyway
+/flyway/
