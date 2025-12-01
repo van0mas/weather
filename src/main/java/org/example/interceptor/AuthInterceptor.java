@@ -1,6 +1,7 @@
 package org.example.interceptor;
 
 import org.example.annotation.AuthRequired;
+import org.example.config.props.AppConstants;
 import org.example.model.Session;
 import org.example.model.User;
 import org.example.repository.UserRepository;
@@ -42,7 +43,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
 
             if (sessionId == null || sessionService.getSession(sessionId).isEmpty()) {
-                response.sendRedirect("/auth/login");
+                response.sendRedirect(request.getContextPath() + AppConstants.Paths.AUTH + AppConstants.Paths.LOGIN);
                 return false;
             }
             Session session = sessionService.getSession(sessionId).get();
