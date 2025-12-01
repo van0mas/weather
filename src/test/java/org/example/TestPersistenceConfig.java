@@ -39,7 +39,7 @@ public class TestPersistenceConfig {
     public Flyway flyway(DataSource dataSource) {
         Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
-                .locations("classpath:db/migration")
+                .locations("classpath:db/migration-test")
                 .load();
         flyway.migrate();
         return flyway;
