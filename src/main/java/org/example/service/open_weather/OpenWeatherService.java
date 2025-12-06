@@ -20,7 +20,7 @@ public class OpenWeatherService {
 
     public LocationApiDto[] findCities(String location) {
         String encodedLocation = URLEncoder.encode(location, StandardCharsets.UTF_8);
-        String url = String.format("%s%s?q=%s&appid=%s&%s",
+        String url = String.format("%s%s?q=%s&appid=%s&limit=%s",
                 config.getBaseUrl(),
                 config.getGeocodingPath(),
                 encodedLocation,
