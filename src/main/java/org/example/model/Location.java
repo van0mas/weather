@@ -1,6 +1,5 @@
 package org.example.model;
 
-
 import lombok.*;
 import org.example.DTO.api.WeatherApiDto;
 import jakarta.persistence.*;
@@ -41,4 +40,3 @@ public class Location {
         this.user = user;
     }
 }
-

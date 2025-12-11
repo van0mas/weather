@@ -16,4 +16,3 @@ public class LocationApiDto {
     private BigDecimal longitude;
     private String country;
 }
-

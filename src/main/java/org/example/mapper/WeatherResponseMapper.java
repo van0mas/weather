@@ -34,4 +34,3 @@ public interface WeatherResponseMapper {
         return "";
     }
 }
-

@@ -10,4 +10,3 @@ import java.util.UUID;
 public class SessionResponseDto {
     private UUID sessionId;
 }
-
