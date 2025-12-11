@@ -56,7 +56,7 @@ public class AuthServiceTest {
     @Test
     public void login_createsSession() {
         authService.register(new UserRegisterDto("alex", "123456", "123456"));
-        SessionResponseDto session = authService.login(new UserLoginDto("alex", "123456"), null);
+        SessionResponseDto session = authService.login(new UserLoginDto("alex", "123456"));
 
         assertNotNull("Session ID should not be null", session.getSessionId());
     }
@@ -64,7 +64,7 @@ public class AuthServiceTest {
     @Test
     public void login_createsSession_withExpiration() {
         authService.register(new UserRegisterDto("alex", "123456", "123456"));
-        SessionResponseDto sessionDto = authService.login(new UserLoginDto("alex", "123456"), null);
+        SessionResponseDto sessionDto = authService.login(new UserLoginDto("alex", "123456"));
 
         assertNotNull(String.valueOf(sessionDto.getSessionId()), "Session ID should not be null");
 

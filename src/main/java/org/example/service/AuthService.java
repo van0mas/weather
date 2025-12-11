@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.example.config.props.AppConstants.MAX_ACTIVE_SESSIONS;
@@ -36,13 +35,8 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public SessionResponseDto login(UserLoginDto dto, String currentSessionId) {
+    public SessionResponseDto login(UserLoginDto dto) {
         User user = authenticate(dto);
-        Optional<Session> existingSession = sessionService.refreshExistingSession(user, currentSessionId);
-
-        if (existingSession.isPresent()) {
-                return SessionResponseMapper.INSTANCE.from(existingSession.get());
-            }
 
         int activeSessionsSize = sessionRepository
                 .findByUserAndExpiresAtAfter(user, LocalDateTime.now()).size();
@@ -71,5 +65,3 @@ public class AuthService {
         return user;
     }
 }
-
-

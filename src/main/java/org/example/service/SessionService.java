@@ -4,6 +4,7 @@ import org.example.model.Session;
 import org.example.model.User;
 import org.example.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
+import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import static org.example.config.props.AppConstants.SESSION_LIFETIME_HOURS;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
+    private final UserRepository userRepository;
 
     public Session createSession(User user) {
         return new Session(
@@ -24,19 +26,6 @@ public class SessionService {
                 user,
                 LocalDateTime.now().plusHours(SESSION_LIFETIME_HOURS)
         );
-    }
-
-    public Optional<Session> refreshExistingSession(User user, String currentSessionId) {
-
-        Optional<Session> existing = getSession(currentSessionId);
-        if (existing.isPresent() && existing.get().getUser().getId().equals(user.getId())) {
-            Session session = existing.get();
-            // Обновляем время жизни сессии
-            session.setExpiresAt(LocalDateTime.now().plusHours(SESSION_LIFETIME_HOURS));
-            return Optional.of(sessionRepository.save(session));
-        }
-
-        return Optional.empty();
     }
 
     public Optional<Session> getSession(String sessionId) {
@@ -51,5 +40,12 @@ public class SessionService {
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
+    }
+
+    public User getUserBySession(String sessionId) {
+        return getSession(sessionId)
+                .map(Session::getUser)
+                .flatMap(user -> userRepository.findById(user.getId()))
+                .orElse(null);
     }
 }

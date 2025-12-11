@@ -1,6 +1,8 @@
 package org.example.config.web;
 
 import org.example.config.props.AppConstants;
+import org.example.interceptor.AuthFormRedirectInterceptor;
+import org.example.interceptor.UserContextInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,10 @@ import org.example.interceptor.AuthInterceptor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
+    private UserContextInterceptor userContextInterceptor;
+    @Autowired
+    private AuthFormRedirectInterceptor authFormRedirectInterceptor;
+    @Autowired
     private AuthInterceptor authInterceptor;
 
     @Override
@@ -34,11 +40,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(userContextInterceptor)
+                .addPathPatterns("/**")
+                .order(1);
+        registry.addInterceptor(authFormRedirectInterceptor)
+                .addPathPatterns("/auth/login")
+                .addPathPatterns("/auth/register")
+                .order(2);
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns(
                         AppConstants.SecuredPaths.HOME,
                         AppConstants.SecuredPaths.LOGOUT,
                         AppConstants.SecuredPaths.WEATHER_ALL
-                );
+                )
+                .order(3);
     }
 }
