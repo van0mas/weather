@@ -50,6 +50,9 @@ public class LocationService {
                             location.getLatitude(),
                             location.getLongitude()
                     );
+                    if (weather == null) {
+                        weather = new WeatherApiDto();
+                    }
                     WeatherResponseDto dto = WeatherResponseMapper.INSTANCE.from(weather);
                     dto.setId(location.getId());
                     dto.setName(location.getName());
