@@ -1,7 +1,6 @@
 package org.example.controller;
 
 import org.example.service.AuthService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,80 +8,59 @@ import org.example.DTO.request.UserLoginDto;
 import org.example.DTO.request.UserRegisterDto;
 import org.example.DTO.response.SessionResponseDto;
 import org.example.annotation.AuthRequired;
-import org.example.config.props.AppConstants;
+import org.example.util.CookieUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static org.example.config.props.AppConstants.COOKIE_SESSION_MAX_AGE_HOURS;
 import static org.example.config.props.AppConstants.COOKIE_SESSION_NAME;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping(AppConstants.Paths.AUTH)
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
+    private final CookieUtils cookieUtils;
 
-    @GetMapping(AppConstants.Paths.REGISTER)
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new UserRegisterDto());
-        return AppConstants.Templates.REGISTER;
+    @GetMapping("/register")
+    public String showRegistrationForm(@ModelAttribute("user") UserRegisterDto user) {
+        return "register";
     }
 
-    @PostMapping(AppConstants.Paths.REGISTER)
-    public String register(@Valid @ModelAttribute("user") UserRegisterDto dto, BindingResult bindingResult) {
+    @GetMapping("/login")
+    public String showLoginForm(@ModelAttribute("user") UserLoginDto user) {
+        return "login";
+    }
 
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("user") UserRegisterDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return AppConstants.Templates.REGISTER;
+            return "register";
         }
 
         authService.register(dto);
-        return AppConstants.Redirects.AUTH_LOGIN;
+        return "redirect:/auth/login";
     }
 
-    @GetMapping(AppConstants.Paths.LOGIN)
-    public String showLoginForm(Model model) {
-        model.addAttribute("user", new UserLoginDto());
-        return AppConstants.Templates.LOGIN;
-    }
-
-    @PostMapping(AppConstants.Paths.LOGIN)
-    public String login(@Valid @ModelAttribute("user") UserLoginDto dto,
-                        BindingResult bindingResult,
-                        @CookieValue(name = COOKIE_SESSION_NAME, required = false) String sessionId,
-                        HttpServletResponse response) {
+    @PostMapping("/login")
+    public String login(@Valid @ModelAttribute("user") UserLoginDto dto, BindingResult bindingResult, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
-            return AppConstants.Templates.LOGIN;
+            return "login";
         }
 
-        SessionResponseDto session = authService.login(dto, sessionId);
-        setSessionCookie(
-                session.getSessionId().toString(),
-                COOKIE_SESSION_MAX_AGE_HOURS * 60 * 60,
-                response
-        );
-
-        return AppConstants.Redirects.HOME;
+        SessionResponseDto session = authService.login(dto);
+        cookieUtils.setSessionCookie(session.getSessionId().toString(), response);
+        return "redirect:/";
     }
 
     @AuthRequired
-    @PostMapping(AppConstants.Paths.LOGOUT)
+    @PostMapping("/logout")
     public String logout(@CookieValue(name = COOKIE_SESSION_NAME, required = false) String sessionId, HttpServletResponse response) {
         authService.logout(UUID.fromString(sessionId));
-        setSessionCookie(null, 0, response);
-
-        return AppConstants.Redirects.AUTH_LOGIN;
-    }
-
-    private void setSessionCookie(String sessionId, int maxAge, HttpServletResponse response) {
-        Cookie cookie = new Cookie(COOKIE_SESSION_NAME, sessionId);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        response.addCookie(cookie);
+        cookieUtils.clearSessionCookie(response);
+        return "redirect:/auth/login";
     }
 }

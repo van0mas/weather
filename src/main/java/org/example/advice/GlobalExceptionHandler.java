@@ -1,14 +1,18 @@
-package org.example.exception;
+package org.example.advice;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.DTO.request.UserLoginDto;
 import org.example.DTO.request.UserRegisterDto;
 import org.example.config.props.AppConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exception.InvalidCredentialsException;
+import org.example.exception.SessionLimitException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Slf4j
@@ -61,6 +65,11 @@ public class GlobalExceptionHandler {
     public String handleHttpClientError(HttpClientErrorException ex) {
         log.error("HTTP error when calling external API: {}", ex.getMessage(), ex);
         return AppConstants.Redirects.HOME;
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public String handleTypeMismatch(HttpServletRequest request, Exception ex) {
+        return "redirect:/";
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

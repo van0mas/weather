@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.DTO.response.WeatherResponseDto;
 import org.example.annotation.AuthRequired;
+import org.example.annotation.CurrentUser;
 import org.example.config.props.AppConstants;
 import org.example.model.User;
 import org.example.service.LocationService;
@@ -19,17 +20,13 @@ import java.util.List;
 @RequestMapping("/")
 public class MainController {
 
-    private final LocationService locationService;
+  private final LocationService locationService;
 
-    @AuthRequired
-    @GetMapping("/")
-    public String home(HttpServletRequest request, Model model) {
-        User user = (User) request.getAttribute("user");
-        List<WeatherResponseDto> locationsWeather = locationService.getLocationsWeather(user);
-
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("weatherList", locationsWeather);
-
-        return AppConstants.Templates.INDEX;
-    }
+  @AuthRequired
+  @GetMapping("/")
+  public String home(@CurrentUser User user, Model model) {
+    List<WeatherResponseDto> locationsWeather = locationService.getLocationsWeather(user);
+    model.addAttribute("weatherList", locationsWeather);
+    return "index";
+  }
 }

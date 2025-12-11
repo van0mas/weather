@@ -61,4 +61,3 @@ public class LocationService {
 
     public void deleteLocation(Long id, Long userId) { locationRepository.deleteByIdAndUserId(id, userId); }
 }
-
