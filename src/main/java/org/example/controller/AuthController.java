@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static org.example.config.props.AppConstants.COOKIE_SESSION_NAME;
+import static org.example.config.props.AppConstants.Cookie.SESSION_NAME;
 
 @RequiredArgsConstructor
 @Controller
@@ -58,7 +58,7 @@ public class AuthController {
 
     @AuthRequired
     @PostMapping("/logout")
-    public String logout(@CookieValue(name = COOKIE_SESSION_NAME, required = false) String sessionId, HttpServletResponse response) {
+    public String logout(@CookieValue(name = SESSION_NAME, required = false) String sessionId, HttpServletResponse response) {
         authService.logout(UUID.fromString(sessionId));
         cookieUtils.clearSessionCookie(response);
         return "redirect:/auth/login";

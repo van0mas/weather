@@ -4,25 +4,54 @@ public final class AppConstants {
 
     private AppConstants() {}
 
-    // === Валидация пользователей ===
-    public static final int USERNAME_MIN_LENGTH = 3;
-    public static final int USERNAME_MAX_LENGTH = 20;
+    public static final class Validation {
+        private Validation() {}
 
-    public static final int PASSWORD_MIN_LENGTH = 6;
-    public static final int PASSWORD_MAX_LENGTH = 64;
+        public static final int USERNAME_MIN_LENGTH = 3;
+        public static final int USERNAME_MAX_LENGTH = 20;
 
-    public static final String USERNAME_PATTERN = "^[A-Za-z_][A-Za-z0-9_]*$";
-    public static final String USERNAME_PATTERN_MESSAGE =
-            "Логин должен начинаться с буквы или _, и содержать только буквы, цифры и _";
+        public static final int PASSWORD_MIN_LENGTH = 6;
+        public static final int PASSWORD_MAX_LENGTH = 64;
 
-    // === Сессии ===
-    public static final int MAX_ACTIVE_SESSIONS = 3;
-    public static final int SESSION_LIFETIME_HOURS = 1;
-    public static final int SCHEDULER_INTERVAL_MINUTES = 20;
+        public static final String USERNAME_PATTERN = "^[A-Za-z_][A-Za-z0-9_]*$";
+        public static final String USERNAME_PATTERN_MESSAGE =
+                "Логин должен начинаться с буквы или _, и содержать только буквы, цифры и _";
 
-    // === Куки ===
-    public static final int COOKIE_SESSION_MAX_AGE_HOURS = SESSION_LIFETIME_HOURS;
-    public static final String COOKIE_SESSION_NAME = "SESSIONID";
+        public static final class Messages {
+            private Messages() {}
+
+            public static final String FIELD_REQUIRED = "Поле обязательно для заполнения";
+
+            public static final String USERNAME_SIZE = "Логин должен быть от "
+                    + USERNAME_MIN_LENGTH
+                    + " до "
+                    + USERNAME_MAX_LENGTH
+                    + " символов";
+
+            public static final String PASSWORD_SIZE = "Пароль должен быть от "
+                    + PASSWORD_MIN_LENGTH
+                    + " до "
+                    + PASSWORD_MAX_LENGTH
+                    + " символов";
+
+            public static final String PASSWORDS_MISMATCH = "Пароли не совпадают";
+        }
+    }
+
+    public static final class Session {
+        private Session() {}
+
+        public static final int MAX_ACTIVE_SESSIONS = 3;
+        public static final int LIFETIME_HOURS = 1;
+        public static final int SCHEDULER_INTERVAL_MINUTES = 20;
+    }
+
+    public static final class Cookie {
+        private Cookie() {}
+
+        public static final int SESSION_MAX_AGE_HOURS = Session.LIFETIME_HOURS;
+        public static final String SESSION_NAME = "SESSIONID";
+    }
 
     public static final class Paths {
         private Paths() {}

@@ -7,25 +7,20 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.config.props.AppConstants;
 
-import static org.example.config.props.AppConstants.USERNAME_PATTERN;
-import static org.example.config.props.AppConstants.USERNAME_PATTERN_MESSAGE;
+import static org.example.config.props.AppConstants.Validation.*;
+import static org.example.config.props.AppConstants.Validation.Messages.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRegisterDto {
 
-    @NotBlank(message = "Логин обязателен")
+    @NotBlank(message = FIELD_REQUIRED)
     @Size(
-            min = AppConstants.USERNAME_MIN_LENGTH,
-            max = AppConstants.USERNAME_MAX_LENGTH,
-            message = "Логин должен быть от "
-                    + AppConstants.USERNAME_MIN_LENGTH
-                    + " до "
-                    + AppConstants.USERNAME_MAX_LENGTH
-                    + " символов"
+            min = USERNAME_MIN_LENGTH,
+            max = USERNAME_MAX_LENGTH,
+            message = USERNAME_SIZE
     )
     @Pattern(
             regexp = USERNAME_PATTERN,
@@ -33,22 +28,18 @@ public class UserRegisterDto {
     )
     private String username;
 
-    @NotBlank(message = "Пароль обязателен")
+    @NotBlank(message = FIELD_REQUIRED)
     @Size(
-            min = AppConstants.PASSWORD_MIN_LENGTH,
-            max = AppConstants.PASSWORD_MAX_LENGTH,
-            message = "Пароль должен быть от "
-                    + AppConstants.PASSWORD_MIN_LENGTH
-                    + " до "
-                    + AppConstants.PASSWORD_MAX_LENGTH
-                    + " символов"
+            min = PASSWORD_MIN_LENGTH,
+            max = PASSWORD_MAX_LENGTH,
+            message = PASSWORD_SIZE
     )
     private String password;
 
-    @NotBlank(message = "Подтверждение пароля обязательно")
+    @NotBlank(message = FIELD_REQUIRED)
     private String passwordConfirm;
 
-    @AssertTrue(message = "Пароли не совпадают")
+    @AssertTrue(message = PASSWORDS_MISMATCH)
     public boolean isPasswordConfirmed() {
         return password != null && password.equals(passwordConfirm);
     }

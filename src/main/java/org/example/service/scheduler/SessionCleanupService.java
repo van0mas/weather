@@ -17,7 +17,7 @@ public class SessionCleanupService {
 
     private final SessionRepository sessionRepository;
 
-    @Scheduled(fixedRate = AppConstants.SCHEDULER_INTERVAL_MINUTES * 60 * 1000)
+    @Scheduled(fixedRate = AppConstants.Session.SCHEDULER_INTERVAL_MINUTES * 60 * 1000)
     @Transactional
     public void deleteExpiredSessions() {
         log.info("Deleting expired sessions...");

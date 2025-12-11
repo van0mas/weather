@@ -6,20 +6,19 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
 import lombok.NoArgsConstructor;
-import org.example.config.props.AppConstants;
 
-import static org.example.config.props.AppConstants.USERNAME_PATTERN;
-import static org.example.config.props.AppConstants.USERNAME_PATTERN_MESSAGE;
+import static org.example.config.props.AppConstants.Validation.*;
+import static org.example.config.props.AppConstants.Validation.Messages.FIELD_REQUIRED;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserLoginDto {
 
-    @NotBlank(message = "Логин обязателен")
+    @NotBlank(message = FIELD_REQUIRED)
     @Size(
-            min = AppConstants.USERNAME_MIN_LENGTH,
-            max = AppConstants.USERNAME_MAX_LENGTH
+            min = USERNAME_MIN_LENGTH,
+            max = USERNAME_MAX_LENGTH
     )
     @Pattern(
             regexp = USERNAME_PATTERN,
@@ -27,10 +26,10 @@ public class UserLoginDto {
     )
     private String username;
 
-    @NotBlank(message = "Пароль обязателен")
+    @NotBlank(message = FIELD_REQUIRED)
     @Size(
-            min = AppConstants.PASSWORD_MIN_LENGTH,
-            max = AppConstants.PASSWORD_MAX_LENGTH
+            min = PASSWORD_MIN_LENGTH,
+            max = PASSWORD_MAX_LENGTH
     )
     private String password;
 }

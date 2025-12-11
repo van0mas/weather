@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.DTO.request.UserLoginDto;
 import org.example.DTO.request.UserRegisterDto;
 import org.example.DTO.response.SessionResponseDto;
+import org.example.config.props.AppConstants;
 import org.example.exception.InvalidCredentialsException;
 import org.example.exception.SessionLimitException;
 import org.example.mapper.SessionResponseMapper;
@@ -17,8 +18,6 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import static org.example.config.props.AppConstants.MAX_ACTIVE_SESSIONS;
 
 @RequiredArgsConstructor
 @Transactional
@@ -41,7 +40,7 @@ public class AuthService {
         int activeSessionsSize = sessionRepository
                 .findByUserAndExpiresAtAfter(user, LocalDateTime.now()).size();
 
-        if (activeSessionsSize >= MAX_ACTIVE_SESSIONS) {
+        if (activeSessionsSize >= AppConstants.Session.MAX_ACTIVE_SESSIONS) {
             throw new SessionLimitException("Session limit exception");
         }
 

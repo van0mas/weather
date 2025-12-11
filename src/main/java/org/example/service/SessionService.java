@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.config.props.AppConstants;
 import org.example.model.Session;
 import org.example.model.User;
 import org.example.repository.SessionRepository;
@@ -10,8 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.example.config.props.AppConstants.SESSION_LIFETIME_HOURS;
 
 @RequiredArgsConstructor
 @Service
@@ -24,7 +23,7 @@ public class SessionService {
         return new Session(
                 UUID.randomUUID(),
                 user,
-                LocalDateTime.now().plusHours(SESSION_LIFETIME_HOURS)
+                LocalDateTime.now().plusHours(AppConstants.Session.LIFETIME_HOURS)
         );
     }
 
