@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Long> {
-    void deleteByIdAndUserId(Long userId, Long locationId);
+    void deleteByIdAndUserId(Long id, Long userId);
     List<Location> getLocationsByUser(User user);
 }
